@@ -1,6 +1,6 @@
-# Expense Tracker Application
+# Expense Tracker Backend
 
-This is a comprehensive expense tracker application built using Node.js, Express, MySQL, and React. It provides functionalities for managing incomes and expenses, tracking transactions, and displaying detailed statistics and graphs on the dashboard.
+This is the backend for a comprehensive expense tracker application built using Node.js, Express, and MySQL. It provides functionalities for managing incomes and expenses, tracking transactions, and providing detailed statistics.
 
 ## Features
 
@@ -8,15 +8,13 @@ This is a comprehensive expense tracker application built using Node.js, Express
 - Income Management (Add, Update, Delete)
 - Expense Management (Add, Update, Delete)
 - Transaction Tracking
-- Dashboard with detailed statistics and graphs
-- Responsive design with a user-friendly interface
+- API Endpoints for managing expenses and incomes
+- JWT-based authentication
 
 ## Technologies Used
 
 - **Backend:** Node.js, Express, MySQL
-- **Frontend:** React, Axios, React Router
 - **Authentication:** JSON Web Tokens (JWT)
-- **Styling:** CSS (Feel free to integrate any CSS framework like Bootstrap, Material-UI, etc.)
 
 ## Installation
 
@@ -30,8 +28,8 @@ This is a comprehensive expense tracker application built using Node.js, Express
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/expense-tracker.git
-    cd expense-tracker/backend
+    git clone https://github.com/sfs1109756/expense.git
+    cd expense-tracker
     ```
 
 2. Install dependencies:
@@ -45,11 +43,11 @@ This is a comprehensive expense tracker application built using Node.js, Express
     ```sql
     CREATE DATABASE expense_tracker;
 
-    -- Use the provided SQL script to create tables and relationships
+    -- Use the provided SQL script to create tables and relationships check database.sql
     -- Run the script in your MySQL client
     ```
 
-4. Create a `.env` file in the `backend` directory and add the following environment variables:
+4. Create a `.env` file in the `root` directory and add the following environment variables:
 
     ```env
     DB_HOST=your-database-host
@@ -61,26 +59,6 @@ This is a comprehensive expense tracker application built using Node.js, Express
     ```
 
 5. Start the backend server:
-
-    ```bash
-    npm start
-    ```
-
-### Frontend Setup
-
-1. Navigate to the `frontend` directory:
-
-    ```bash
-    cd ../frontend
-    ```
-
-2. Install dependencies:
-
-    ```bash
-    npm install
-    ```
-
-3. Start the frontend development server:
 
     ```bash
     npm start
@@ -144,7 +122,7 @@ This is a comprehensive expense tracker application built using Node.js, Express
 
 ## Running Tests
 
-You can add and run tests using a testing framework like Jest for backend and React Testing Library for frontend. Detailed instructions for setting up tests will be added later.
+You can add and run tests using a testing framework like Jest. Detailed instructions for setting up tests will be added later.
 
 ## Contributing
 
@@ -156,7 +134,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Acknowledgments
 
-- Thanks to the creators of Node.js, Express, React, and MySQL for their awesome tools.
+- Thanks to the creators of Node.js, Express, and MySQL for their awesome tools.
 - Thanks to the open-source community for their contributions and support.
 
 Feel free to enhance this README with more details as your project evolves!
