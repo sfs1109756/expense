@@ -9,5 +9,5 @@ router.post('/give', authMiddleware, friendController.giveAmount);
 router.post('/receive', authMiddleware, friendController.receiveAmount);
 router.delete('/delete', authMiddleware, friendController.deleteFriend);
 router.get('/:friend_id/transactions', authMiddleware, friendController.getFriendTransactions);
-
+router.get('/:friend_id/stats', authMiddleware, friendController.getFriendStats);
 module.exports = router;

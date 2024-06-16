@@ -6,7 +6,6 @@ exports.addFriend = async (req, res) => {
   const user_id = req.user.id;
 
   try {
-    // Check if the friend name already exists for the user
     const existingFriend = await Friend.findByName(user_id, name);
     if (existingFriend) {
       return res.status(400).json({ error: 'Friend with this name already exists' });
@@ -22,7 +21,7 @@ exports.addFriend = async (req, res) => {
 
     res.status(201).json({ message: 'Friend added successfully', friendId: friendId });
   } catch (error) {
-    console.error(error); // Log the error
+    console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -32,9 +31,20 @@ exports.getFriends = async (req, res) => {
 
   try {
     const friends = await Friend.findByUserId(user_id);
-    res.status(200).json(friends);
+    const friendsWithBalance = await Promise.all(friends.map(async (friend) => {
+      const amountGiven = await Friend.getAmountGiven(friend.id);
+      const amountReceived = await Friend.getAmountReceived(friend.id);
+      const balance = amountGiven - amountReceived;
+      return {
+        ...friend,
+        amountGiven,
+        amountReceived,
+        balance
+      };
+    }));
+    res.status(200).json(friendsWithBalance);
   } catch (error) {
-    console.error(error); // Log the error
+    console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -54,7 +64,7 @@ exports.giveAmount = async (req, res) => {
 
     res.status(200).json({ message: 'Amount given to friend successfully' });
   } catch (error) {
-    console.error(error); // Log the error
+    console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -74,7 +84,7 @@ exports.receiveAmount = async (req, res) => {
 
     res.status(200).json({ message: 'Amount received from friend successfully' });
   } catch (error) {
-    console.error(error); // Log the error
+    console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -92,7 +102,7 @@ exports.deleteFriend = async (req, res) => {
     await Friend.delete(friend_id);
     res.status(200).json({ message: 'Friend deleted successfully' });
   } catch (error) {
-    console.error(error); // Log the error
+    console.error(error);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -109,6 +119,37 @@ exports.getFriendTransactions = async (req, res) => {
 
     const transactions = await FriendTransaction.findByFriendId(friend_id);
     res.status(200).json(transactions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+exports.getFriendStats = async (req, res) => {
+  const { friend_id } = req.params;
+  const user_id = req.user.id;
+
+  try {
+    const friend = await Friend.findById(friend_id);
+    if (!friend || friend.user_id !== user_id) {
+      return res.status(404).json({ error: 'Friend not found' });
+    }
+
+    const amountGiven = await Friend.getAmountGiven(friend_id);
+    const amountReceived = await Friend.getAmountReceived(friend_id);
+    const balance = amountGiven - amountReceived;
+
+    const stats = {
+      friend_id: friend.id,
+      name: friend.name,
+      email: friend.email,
+      created_at: friend.created_at,
+      amountGiven,
+      amountReceived,
+      balance
+    };
+
+    res.status(200).json(stats);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });

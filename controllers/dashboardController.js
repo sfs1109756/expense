@@ -10,19 +10,22 @@ exports.getStats = async (req, res) => {
     const expenses = await Expense.findByUserId(user_id);
     const transactions = await Transaction.findByUserId(user_id);
 
-    const totalIncome = incomes.reduce((acc, income) => acc + income.amount, 0);
-    const totalExpense = expenses.reduce((acc, expense) => acc + expense.amount, 0);
+    const totalIncome = incomes.reduce((acc, income) => acc + parseFloat(income.amount), 0);
+    const totalExpense = expenses.reduce((acc, expense) => acc + parseFloat(expense.amount), 0);
     const netSavings = totalIncome - totalExpense;
 
     const incomeByCategory = incomes.reduce((acc, income) => {
-      acc[income.source] = (acc[income.source] || 0) + income.amount;
+      acc[income.source] = (acc[income.source] || 0) + parseFloat(income.amount);
       return acc;
     }, {});
 
     const expenseByCategory = expenses.reduce((acc, expense) => {
-      acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
+      acc[expense.category] = (acc[expense.category] || 0) + parseFloat(expense.amount);
       return acc;
     }, {});
+
+    const last10Incomes = incomes.slice(-10).reverse();
+    const last10Expenses = expenses.slice(-10).reverse();
 
     const data = {
       totalIncome,
@@ -30,7 +33,9 @@ exports.getStats = async (req, res) => {
       netSavings,
       incomeByCategory,
       expenseByCategory,
-      transactions
+      transactions,
+      last10Incomes,
+      last10Expenses
     };
 
     res.status(200).json(data);
